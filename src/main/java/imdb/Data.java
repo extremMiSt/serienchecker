@@ -114,6 +114,7 @@ public class Data {
     d.sort();
     XStream xStream = new XStream(new DomDriver());
     xStream.setMode(XStream.ID_REFERENCES);
+    xStream.allowTypes(new Class[]{Data.class, Series.class, Season.class, Episode.class});
     xStream.alias("x", String.class);
     xStream.alias("a", Data.class);
     xStream.aliasField("aa", Data.class, "series");
@@ -154,6 +155,7 @@ public class Data {
     if (in.exists()) {
       XStream xStream = new XStream(new StaxDriver());
       xStream.setMode(XStream.ID_REFERENCES);
+      xStream.allowTypes(new Class[]{Data.class, Series.class, Season.class, Episode.class});
       xStream.alias("x", String.class);
       xStream.alias("a", Data.class);
       xStream.aliasField("aa", Data.class, "series");
