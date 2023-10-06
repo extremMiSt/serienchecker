@@ -9,7 +9,7 @@ public class Episode implements Comparable<Episode> {
     private Season season;
     private int number;
     private boolean watched = false;
-
+    
     public Episode(String imdbID, String name, Season season, int number) {
         this.imdbID = imdbID;
         this.name = name;
@@ -56,8 +56,8 @@ public class Episode implements Comparable<Episode> {
     }
 
     @Override
-    public int compareTo(Episode e) {
-        return ((Integer)this.getNum()).compareTo(e.getNum());
+    public int compareTo(Episode s) {
+      return ((Integer)this.getNum()).compareTo(s.getNum());
     }
 
   @Override

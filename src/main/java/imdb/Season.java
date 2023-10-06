@@ -40,11 +40,11 @@ public class Season implements Comparable<Season> {
     @Override
     public int compareTo(Season s) {
         try{ //wenns ne zahl ist zahlenmäßig sortieren
-            Integer int1 = new Integer(this.getNum());
-            Integer int2 = new Integer(s.getNum());
+            Integer int1 = Integer.valueOf(this.getNum());
+            Integer int2 = Integer.valueOf(s.getNum());
             return int1.compareTo(int2);
         }catch(NumberFormatException e){ //keine nummer
-            return this.getNum().compareTo(s.getNum());
+            return -this.getNum().compareTo(s.getNum());
         }
     }
 

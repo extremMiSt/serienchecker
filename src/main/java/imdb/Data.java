@@ -52,7 +52,7 @@ public class Data {
     errors = 0;
     for (int i = 0; i < this.size(); i++) {
       final int b = i;
-      while (group.activeCount() > 10) {
+      while (group.activeCount() > 5) {
         try {
           Thread.sleep(10);
         } catch (InterruptedException ex) {

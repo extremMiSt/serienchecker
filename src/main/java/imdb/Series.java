@@ -86,7 +86,7 @@ public class Series implements Comparable<Series> {
     boolean missed = false; //hab ne ungesehene episode gefunden
     for (int i = 0; i < numSeasons(); i++) {
       Season s = this.getSeason(i);
-      if (s.getNum().equals("-1")) {
+      if (s.getNum().equals("Unknown")) {
         continue;
       }
       for (int j = 0; j < s.getNumEpisodes(); j++) {
