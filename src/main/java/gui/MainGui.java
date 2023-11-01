@@ -127,7 +127,6 @@ public class MainGui extends JFrame {
           try {
             setTitle("!!Serienchecker!!");
             Main.data.add(new Series(serie));
-            Main.data.series.getLast().setWatched(); ////////SUPER HARD DEBUG/MOVING THING
             Data.serialize(Main.data);
             reInit();
             setTitle("Serienchecker");
