@@ -102,7 +102,7 @@ public class ImdbInfo {
       System.out.println("elem episodes" + episodes.size());
       for (int i = 0; i < episodes.size(); i++) {
         Element episode = episodes.get(i);
-        String href = episode.child(0).attr("href");
+        String href = episode.child(0).child(0).attr("href");
         String eNumS = href.substring(href.indexOf("ep_ep")+5);
         Integer eNum = null;
         try {
