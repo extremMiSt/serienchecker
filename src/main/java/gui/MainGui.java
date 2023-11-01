@@ -1,8 +1,8 @@
 package gui;
 
-import imdb.Data;
-import imdb.Episode;
-import imdb.Series;
+import tmdb.Data;
+import tmdb.Episode;
+import tmdb.Series;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -122,11 +122,12 @@ public class MainGui extends JFrame {
     add.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
-        String serie = JOptionPane.showInputDialog(content, "Gib den IMDB-Key der Serie ein", "Neue Serie", JOptionPane.INFORMATION_MESSAGE);
-        if (serie != null && (serie.length() == 9 || serie.length() == 10)) {
+        String serie = JOptionPane.showInputDialog(content, "Gib den TMDB-Key der Serie ein", "Neue Serie", JOptionPane.INFORMATION_MESSAGE);
+        if (serie != null /*&& (serie.length() == 9 || serie.length() == 10)*/) {
           try {
             setTitle("!!Serienchecker!!");
             Main.data.add(new Series(serie));
+            Main.data.series.getLast().setWatched(); ////////SUPER HARD DEBUG/MOVING THING
             Data.serialize(Main.data);
             reInit();
             setTitle("Serienchecker");

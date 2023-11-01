@@ -1,9 +1,9 @@
 package gui;
 
-import imdb.Data;
-import imdb.Episode;
-import imdb.Season;
-import imdb.Series;
+import tmdb.Data;
+import tmdb.Episode;
+import tmdb.Season;
+import tmdb.Series;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;

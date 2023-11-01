@@ -5,7 +5,7 @@
 package serienchecker;
 
 import gui.MainGui;
-import imdb.Data;
+import tmdb.Data;
 import java.io.IOException;
 
 /**
