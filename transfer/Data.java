@@ -1,4 +1,4 @@
-package tmdb;
+package transfer.tmdb;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -45,53 +45,53 @@ public class Data {
     }
   }
 
-  public void update() throws IOException {
-    Main.gui.setTitle("!! 0 Serienchecker 0/" + this.size() + "!!");
-    ThreadGroup group = new ThreadGroup("update");
-    updated = 0;
-    errors = 0;
-    for (int i = 0; i < this.size(); i++) {
-      final int b = i;
-      while (group.activeCount() > 1) {
-        try {
-          Thread.sleep(100);
-        } catch (InterruptedException ex) {
-        }
-      }
-      Thread t = new Thread(group, b + " " + get(b).getName()) {
-        @Override
-        public void run() {
-          try {
-            Series se = get(b);
-            Series se2 = new Series(se.getTmdbID());
-            for (int j = 0; j < se.numSeasons(); j++) {
-              Season s = se.getSeason(j);
-              for (int k = 0; k < s.getNumEpisodes(); k++) {
-                Episode e = s.getEpisode(k);
-                if (e.isWatched()) {
-                  Episode e2 = se2.getEpisode(e.getTmdbID());
-                  if (e2 != null) {
-                    e2.setWatched(true);
-                  }
-                }
-              }
-            }
-            incrementUpdated();
-            se2.setText(se.getText());
-            series.set(series.lastIndexOf(se), se2);
-          } catch (IOException ex) {
-            Logger.getLogger(Data.class.getName()).log(Level.SEVERE, null, ex);
-          }
-        }
-      };
-      t.start();
-    }
-    while (group.activeCount() > 0) {
-    }
-    Data.serialize(this);
-    Main.gui.reInit();
-    Main.gui.setTitle("Serienchecker");
-  }
+//  public void update() throws IOException {
+//    Main.gui.setTitle("!! 0 Serienchecker 0/" + this.size() + "!!");
+//    ThreadGroup group = new ThreadGroup("update");
+//    updated = 0;
+//    errors = 0;
+//    for (int i = 0; i < this.size(); i++) {
+//      final int b = i;
+//      while (group.activeCount() > 1) {
+//        try {
+//          Thread.sleep(100);
+//        } catch (InterruptedException ex) {
+//        }
+//      }
+//      Thread t = new Thread(group, b + " " + get(b).getName()) {
+//        @Override
+//        public void run() {
+//          try {
+//            Series se = get(b);
+//            Series se2 = new Series(se.getTmdbID());
+//            for (int j = 0; j < se.numSeasons(); j++) {
+//              Season s = se.getSeason(j);
+//              for (int k = 0; k < s.getNumEpisodes(); k++) {
+//                Episode e = s.getEpisode(k);
+//                if (e.isWatched()) {
+//                  Episode e2 = se2.getEpisode(e.getTmdbID());
+//                  if (e2 != null) {
+//                    e2.setWatched(true);
+//                  }
+//                }
+//              }
+//            }
+//            incrementUpdated();
+//            se2.setText(se.getText());
+//            series.set(series.lastIndexOf(se), se2);
+//          } catch (IOException ex) {
+//            Logger.getLogger(Data.class.getName()).log(Level.SEVERE, null, ex);
+//          }
+//        }
+//      };
+//      t.start();
+//    }
+//    while (group.activeCount() > 0) {
+//    }
+//    Data.serialize(this);
+//    Main.gui.reInit();
+//    Main.gui.setTitle("Serienchecker");
+//  }
 
   public synchronized void incrementUpdated() {
     updated = updated + 1;

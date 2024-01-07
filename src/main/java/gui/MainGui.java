@@ -1,8 +1,5 @@
 package gui;
 
-import tmdb.Data;
-import tmdb.Episode;
-import tmdb.Series;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
@@ -10,8 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -24,6 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import serienchecker.Main;
+import tmdbapi.query.Series;
+import tmdbapi.query.Episode;
 
 public class MainGui extends JFrame {
 
@@ -31,7 +31,7 @@ public class MainGui extends JFrame {
   private JPanel content;
   private static final Color[] color = {Color.GREEN, Color.YELLOW, Color.ORANGE, Color.RED};
 
-  public MainGui() {
+  public MainGui() throws SQLException {
     super("Serienchecker");
     this.setBounds(0, 0, 640, 400);
     scroll = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -51,14 +51,18 @@ public class MainGui extends JFrame {
     this.setVisible(true);
   }
 
-  private void init() {
+  private void init() throws SQLException {
     int size = 0;
     Border b = new CustomLineBorder(true, true, false, false, Color.LIGHT_GRAY);
     content = new JPanel();
     content.setLayout(null);
     content.setBounds(0, 0, 620, 0);
-    for (int i = 0; i < Main.data.size(); i++) {
-      final Series s = Main.data.get(i);
+    
+    List<Series> added = Main.data.getAdded();
+    added.sort(null);
+    
+    for (int i = 0; i < added.size(); i++) {
+      final Series s = added.get(i);
       JLabel name = new JLabel();
       name.setBounds(120, size, 250, 20);
       name.setText(s.getName());
@@ -66,16 +70,13 @@ public class MainGui extends JFrame {
       content.add(name);
       final JTextField desc = new JTextField();
       desc.setBounds(370, size, 250, 20);
-      desc.setText(s.getText());
+      desc.setText(s.getComment());
       desc.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent arg0) {
           try {
-            s.setText(desc.getText());
-            Data.serialize(Main.data);
-          } catch (FileNotFoundException ex) {
-            Logger.getLogger(MainGui.class.getName()).log(Level.SEVERE, null, ex);
-          } catch (IOException ex) {
+            s.setComment(desc.getText());
+          } catch (SQLException ex) {
             Logger.getLogger(MainGui.class.getName()).log(Level.SEVERE, null, ex);
           }
         }
@@ -108,7 +109,11 @@ public class MainGui extends JFrame {
         public void actionPerformed(ActionEvent arg0) {
           Main.x = getX();
           Main.y = getY();
-          new SeriesGui(Main.data.get(seriesnum)).setVisible(true);
+          try {
+            new SeriesGui(added.get(seriesnum)).setVisible(true);
+          } catch (SQLException ex) {
+            Logger.getLogger(MainGui.class.getName()).log(Level.SEVERE, null, ex);
+          }
           setVisible(false);
         }
       });
@@ -123,14 +128,21 @@ public class MainGui extends JFrame {
       @Override
       public void actionPerformed(ActionEvent arg0) {
         String serie = JOptionPane.showInputDialog(content, "Gib den TMDB-Key der Serie ein", "Neue Serie", JOptionPane.INFORMATION_MESSAGE);
-        if (serie != null /*&& (serie.length() == 9 || serie.length() == 10)*/) {
+        if (serie != null) {
           try {
-            setTitle("!!Serienchecker!!");
-            Main.data.add(new Series(serie));
-            Data.serialize(Main.data);
-            reInit();
-            setTitle("Serienchecker");
+            if(Main.data.addTMDB(Integer.parseInt(serie))){
+              setTitle("!!Serienchecker!!");
+              Main.data.update();
+              reInit();
+              setTitle("Serienchecker");
+            }else{
+              JOptionPane.showMessageDialog(content, serie + " ists bereits in der Liste");
+            }
           } catch (IOException ex) {
+            Logger.getLogger(MainGui.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (SQLException ex) {
+            Logger.getLogger(MainGui.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (InterruptedException ex) {
             Logger.getLogger(MainGui.class.getName()).log(Level.SEVERE, null, ex);
           }
         }
@@ -144,7 +156,14 @@ public class MainGui extends JFrame {
       public void actionPerformed(ActionEvent arg0) {
         try {
           Main.data.update();
+          Main.data.loadAll();
+          setTitle("Serienchecker");
+          reInit();
+        } catch (SQLException ex) {
+          Logger.getLogger(MainGui.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+          Logger.getLogger(MainGui.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
           Logger.getLogger(MainGui.class.getName()).log(Level.SEVERE, null, ex);
         }
       }
@@ -154,7 +173,7 @@ public class MainGui extends JFrame {
     scroll.setViewportView(content);
   }
 
-  public void reInit() {
+  public void reInit() throws SQLException {
     content.setVisible(false);
     scroll.setViewportView(content);
     init();

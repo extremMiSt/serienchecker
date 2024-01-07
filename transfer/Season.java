@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package tmdb;
+package transfer.tmdb;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,11 +52,11 @@ public class Season implements Comparable<Season> {
         episodes.add(episode);
     }
     
-    public void setWatched(boolean watch){
-        for (int i = 0; i < episodes.size(); i++) {
-            episodes.get(i).setWatched(watch);
-        }
-    }
+//    public void setWatched(boolean watch){
+//        for (int i = 0; i < episodes.size(); i++) {
+//            episodes.get(i).setWatched(watch);
+//        }
+//    }
 
   @Override
   public String toString() {

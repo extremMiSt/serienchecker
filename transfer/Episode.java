@@ -1,17 +1,17 @@
-package imdb;
+package transfer.tmdb;
 
 import serienchecker.Main;
 
 public class Episode implements Comparable<Episode> {
     
-    private String imdbID;
+    private String tmdbID;
     private String name;
     private Season season;
     private int number;
     private boolean watched = false;
     
     public Episode(String imdbID, String name, Season season, int number) {
-        this.imdbID = imdbID;
+        this.tmdbID = imdbID;
         this.name = name;
         this.season = season;
         this.number = number;
@@ -25,8 +25,8 @@ public class Episode implements Comparable<Episode> {
 //        //this.watched = watched;
 //    }
     
-    public String getImdbID(){
-        return imdbID;
+    public String getTmdbID(){
+        return tmdbID;
     }
 
     public String getName() {
@@ -42,18 +42,18 @@ public class Episode implements Comparable<Episode> {
     }
 
     public boolean isWatched() {
-        return (Main.data.watched != null && Main.data.watched.contains(imdbID));
+        return (Transfer.dataOld.watched != null &&Transfer.dataOld.watched.contains(tmdbID));
     }
 
-    public void setWatched(boolean watched) {
-        //this.watched = watched;
+/*    public void setWatched(boolean watched) {
+        this.watched = watched;
         if(watched){
-          Main.data.watched.add(imdbID);
+          Main.data.watched.add(tmdbID);
         }else{
-          Main.data.watched.remove(imdbID);
+          Main.data.watched.remove(tmdbID);
         }
         
-    }
+    }*/
 
     @Override
     public int compareTo(Episode s) {
@@ -62,7 +62,7 @@ public class Episode implements Comparable<Episode> {
 
   @Override
   public String toString() {
-    return "Episode{" + "imdbID=" + imdbID + ", name=" + name + ", number=" + number + ", watched=" + watched + '}';
+    return "Episode{" + "imdbID=" + tmdbID + ", name=" + name + ", number=" + number + ", watched=" + watched + '}';
   }
     
 }

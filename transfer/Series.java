@@ -1,4 +1,4 @@
-package imdb;
+package transfer.tmdb;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,30 +7,22 @@ import java.util.List;
 
 public class Series implements Comparable<Series> {
   
-  private String imdbID;
+  private String tmdbID;
   private String name;
   private List<Season> seasons = new ArrayList<Season>();
   private String text;
   
-  public Series(String id) throws IOException {
-    imdbID = id;
-    ImdbInfo info = new ImdbInfo(imdbID);
+/*  public Series(String id) throws IOException {
+    tmdbID = id;
+    TmdbInfo info = new TmdbInfo(tmdbID);
     name = info.getSeriesName();
     text = "";
     String[] seasonNames = info.getSeasonNames();
-    if(seasonNames.length > 0 && info.isSeasonsWorking()){
-      for (int i = 0; i < seasonNames.length; i++) {
-        Season s = info.getSeason(seasonNames[i]);
-        seasons.add(s);
-      }
-    }else {
-      String[] years = info.getYears();
-      for (int i = 0; i < years.length; i++) {
-        Season s = info.getYear(years[i]);
-        seasons.add(s);
-      }
+    for (int i = 0; i < seasonNames.length; i++) {
+      Season s = info.getSeason(seasonNames[i]);
+      seasons.add(s);
     }
-  }
+  }*/
   
   public String getName() {
     return name;
@@ -48,8 +40,8 @@ public class Series implements Comparable<Series> {
     return seasons.get(num);
   }
   
-  public String getImdbID() {
-    return imdbID;
+  public String getTmdbID() {
+    return tmdbID;
   }
   
   public int numSeasons() {
@@ -86,7 +78,7 @@ public class Series implements Comparable<Series> {
     boolean missed = false; //hab ne ungesehene episode gefunden
     for (int i = 0; i < numSeasons(); i++) {
       Season s = this.getSeason(i);
-      if (s.getNum().equals("Unknown")) {
+      if (s.getNum().equals("0")) {
         continue;
       }
       for (int j = 0; j < s.getNumEpisodes(); j++) {
@@ -134,7 +126,7 @@ public class Series implements Comparable<Series> {
       Season s = this.getSeason(i);
       for (int j = 0; j < s.getNumEpisodes(); j++) {
         Episode e = s.getEpisode(j);
-        if (e.getImdbID().equals(imdbID)) {
+        if (e.getTmdbID().equals(imdbID)) {
           return e;
         }
       }
@@ -142,11 +134,17 @@ public class Series implements Comparable<Series> {
     return null;
   }
   
+//  public void setWatched(){
+//    for (Season season : seasons) {
+//      season.setWatched(true);
+//    }
+//  }
+  
   @Override
   public int compareTo(Series s) {
     int i = ((Integer) status()).compareTo(s.status());
     if (i == 0) {
-      return this.name.compareTo(s.getName());
+      return this.name.toLowerCase().compareTo(s.getName().toLowerCase());
     }
     return i;
   }
@@ -167,7 +165,7 @@ public class Series implements Comparable<Series> {
       return false;
     }
     final Series other = (Series) obj;
-    if ((this.imdbID == null) ? (other.imdbID != null) : !this.imdbID.equals(other.imdbID)) {
+    if ((this.tmdbID == null) ? (other.tmdbID != null) : !this.tmdbID.equals(other.tmdbID)) {
       return false;
     }
     return true;
@@ -176,7 +174,7 @@ public class Series implements Comparable<Series> {
   @Override
   public int hashCode() {
     int hash = 5;
-    hash = 97 * hash + (this.imdbID != null ? this.imdbID.hashCode() : 0);
+    hash = 97 * hash + (this.tmdbID != null ? this.tmdbID.hashCode() : 0);
     return hash;
   }
   
